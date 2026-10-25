@@ -23,15 +23,15 @@ from config import (
     EMBEDDING_DIM,
     SIMULATED_DNA_LENGTH,
 )
-from services.vit_service import get_vit_service
+from vit_service import get_vit_service
 from services.dna_service import (
     encode_embedding_to_dna,
     validate_dna_sequence,
     get_dna_statistics,
     format_dna_preview,
 )
-from services.graph_search_service import search_similar_images
-from services.storage_service import get_storage_service
+from graph_search_service import search_similar_images
+from storage_service import get_storage_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
