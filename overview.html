@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Helix — Overview Dashboard{% endblock %}
+{% block breadcrumb %}Overview{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">
+      <span class="eyebrow-line"></span> INTELLIGENT ARCHIVING, REIMAGINED
+    </div>
+    <h1>Search by <em>meaning.</em><br>Think in sequences.</h1>
+    <p>
+      Explore a visual-semantic archive powered by Vision Transformers and graph-based similarity refinement — with simulated DNA fingerprints for every image.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/image-index">
+        Build your image index <span>↗</span>
+      </a>
+      <a class="text-link" href="/pipeline">
+        Explore the pipeline <span>→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-art" aria-hidden="true">
+    <div class="orbit orbit-one"></div>
+    <div class="orbit orbit-two"></div>
+    <div class="helix-core">
+      <span class="core-glow"></span>
+      <div class="helix-strand strand-a"></div>
+      <div class="helix-strand strand-b"></div>
+      <div class="core-label">A·T<br>C·G</div>
+    </div>
+    <div class="float-card float-card-top">
+      <span class="mini-dot"></span> SEMANTIC ENGINE <strong>ACTIVE</strong>
+    </div>
+    <div class="float-card float-card-bottom">
+      <span class="wave">∿</span>
+      <div>
+        <strong>Embedding space</strong>
+        <small>ViT · 768 dimensions</small>
+      </div>
+    </div>
+    <div class="art-caption">
+      <span>BIO-INSPIRED COMPUTING</span>
+      <span>01 / 04</span>
+    </div>
+  </div>
+</section>
+
+<!-- Summary Statistics Cards -->
+<section class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-top">
+      <span>Indexed images</span>
+      <span class="stat-icon violet">▦</span>
+    </div>
+    <div class="stat-number" id="indexedCount">{{ indexed_count }}</div>
+    <div class="stat-foot">
+      <span class="tiny-dot green"></span> Persisted locally in session
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-top">
+      <span>Feature extractor</span>
+      <span class="stat-icon mint">✳</span>
+    </div>
+    <div class="stat-number stat-text">Vision Transformer</div>
+    <div class="stat-foot">ViT-B/16 · 768-D Latent Space</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-top">
+      <span>Similarity refinement</span>
+      <span class="stat-icon amber">⌘</span>
+    </div>
+    <div class="stat-number stat-text">k-NN Message Passing</div>
+    <div class="stat-foot">Laplacian Diffusion Baseline</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-top">
+      <span>Compute device</span>
+      <span class="stat-icon blue">⌁</span>
+    </div>
+    <div class="stat-number stat-text" id="deviceValue">{{ device|upper }}</div>
+    <div class="stat-foot" id="deviceFoot">
+      {% if device == 'cuda' %}GPU acceleration active{% else %}Local CPU inference mode{% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Quick Actions & Recent Archive Panel -->
+<section class="dashboard-section">
+  <div class="section-header">
+    <div>
+      <span class="section-kicker">ARCHIVE REPOSITORY</span>
+      <h2>Current Dataset Images</h2>
+      <p>Visual items indexed in the local archive and mapped into in-silico nucleotide fingerprints.</p>
+    </div>
+    <div class="header-actions">
+      <a class="button button-outline" href="/image-index">Manage Index <span>▦</span></a>
+      <a class="button button-primary" href="/semantic-search">Start Searching <span>⌕</span></a>
+    </div>
+  </div>
+
+  <!-- Recent Grid or Empty State -->
+  <div class="archive-overview-grid" id="overviewArchiveGrid">
+    <div class="empty-state-card" id="overviewEmptyState">
+      <div class="empty-icon-wrap">▦</div>
+      <h3>Your archive is currently empty</h3>
+      <p>Upload a few images or load the pre-configured sample dataset to start exploring semantic retrieval.</p>
+      <div class="empty-actions">
+        <a class="button button-primary" href="/image-index">Go to Image Index <span>→</span></a>
+        <button class="button button-outline" id="quickLoadSamplesBtn" type="button">
+          Load 8 Sample Images <span>⚡</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline Highlights Section -->
+<section class="pipeline-section">
+  <div class="pipeline-title">
+    <div>
+      <div class="section-kicker">UNDER THE HOOD</div>
+      <h2>A hybrid pipeline, step by step.</h2>
+    </div>
+    <p>From raw pixels to ViT features, graph relationships, and a searchable DNA fingerprint.</p>
+  </div>
+  <div class="pipeline-grid">
+    <div class="pipeline-card">
+      <span class="step-number">01</span>
+      <div class="pipeline-symbol symbol-violet">▧</div>
+      <h3>Visual encoding</h3>
+      <p>ViT-B/16 extracts a 768-D semantic vector from each 224×224 patchified image.</p>
+      <span class="pipeline-chip">768-D EMBEDDING</span>
+    </div>
+    <div class="pipeline-card">
+      <span class="step-number">02</span>
+      <div class="pipeline-symbol symbol-mint">⌘</div>
+      <h3>Graph context</h3>
+      <p>k-NN graph message passing propagates neighbor context across candidate embeddings.</p>
+      <span class="pipeline-chip">K-NN DIFFUSION</span>
+    </div>
+    <div class="pipeline-card">
+      <span class="step-number">03</span>
+      <div class="pipeline-symbol symbol-amber">A·T</div>
+      <h3>DNA fingerprint</h3>
+      <p>Embedding coordinates quantize to 8-bit ints and transcribes to A, C, G, T.</p>
+      <span class="pipeline-chip">3,072 NUCLEOTIDES</span>
+    </div>
+    <div class="pipeline-card">
+      <span class="step-number">04</span>
+      <div class="pipeline-symbol symbol-blue">⌕</div>
+      <h3>Semantic retrieval</h3>
+      <p>Refined query representations rank dataset images by cosine similarity.</p>
+      <span class="pipeline-chip">COSINE SIMILARITY</span>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Overview page specific logic: load recent archive items
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await fetch("/api/images");
+      const data = await res.json();
+      const grid = document.getElementById("overviewArchiveGrid");
+      const emptyState = document.getElementById("overviewEmptyState");
+
+      if (data.images && data.images.length > 0) {
+        if (emptyState) emptyState.remove();
+        grid.innerHTML = "";
+        data.images.slice(0, 8).forEach(img => {
+          const card = document.createElement("div");
+          card.className = "overview-thumb-card";
+          card.innerHTML = `
+            <div class="thumb-wrap">
+              <img src="${img.url}" alt="${img.name}" loading="lazy">
+              <span class="thumb-gc">${img.gc_content}% GC</span>
+            </div>
+            <div class="thumb-meta">
+              <strong>${img.name}</strong>
+              <small>${img.dna_length.toLocaleString()} nt · ${img.dimensions ? img.dimensions.join('×') : '224×224'}</small>
+              <button class="thumb-dna-link" type="button" onclick="inspectDna('${img.id}', '${img.name.replace(/'/g, "\\'")}')">
+                Inspect DNA ↗
+              </button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+    } catch (e) {
+      console.warn("Could not load overview images:", e);
+    }
+
+    const quickBtn = document.getElementById("quickLoadSamplesBtn");
+    if (quickBtn) {
+      quickBtn.addEventListener("click", async () => {
+        quickBtn.disabled = true;
+        quickBtn.textContent = "Indexing 8 samples…";
+        try {
+          const res = await fetch("/api/index-samples", { method: "POST" });
+          const data = await res.json();
+          window.location.reload();
+        } catch (e) {
+          alert("Failed to load sample dataset: " + e);
+          quickBtn.disabled = false;
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

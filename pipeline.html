@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Helix — System Architecture & Pipeline{% endblock %}
+{% block breadcrumb %}Pipeline{% endblock %}
+
+{% block content %}
+<div class="pipeline-page-layout">
+  <!-- Top Architecture Summary Banner -->
+  <section class="panel arch-hero-panel">
+    <div class="arch-hero-content">
+      <div class="section-kicker">TECHNICAL SPECIFICATION & MILESTONE STATUS</div>
+      <h1>System Architecture & Research Pipeline</h1>
+      <p>
+        AI-Based Hybrid Semantic Search Framework for DNA Data Storage using Vision Transformers and Graph Neural Networks.
+        This page details the implemented <strong>First 50% Milestone</strong> alongside the planned inductive GNN research scope.
+      </p>
+
+      <div class="milestone-status-strip">
+        <div class="strip-item active">
+          <span class="strip-indicator green"></span>
+          <div>
+            <strong>Milestone 1 (50% — Current)</strong>
+            <small>ViT Feature Extraction, k-NN Graph Diffusion Baseline, Simulated DNA Hashing</small>
+          </div>
+        </div>
+        <div class="strip-item planned">
+          <span class="strip-indicator purple"></span>
+          <div>
+            <strong>Milestone 2 (50% — Planned Future Scope)</strong>
+            <small>Trained Inductive GNN (GCN/GAT), Biological Error-Correction & In-Silico Sequencing</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: The 8 Implemented Stages (Milestone 1) -->
+  <section class="pipeline-flow-section">
+    <div class="section-heading-row">
+      <div>
+        <span class="section-kicker">WORKFLOW EXECUTION</span>
+        <h2>Implemented Processing Pipeline (Stages 01 – 08)</h2>
+        <p>End-to-end data processing path currently active in the Helix runtime environment.</p>
+      </div>
+      <span class="status-pill status-active">● 8 of 8 Active in Milestone 1</span>
+    </div>
+
+    <div class="stage-flow-grid">
+      <!-- Stage 1 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">01</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap violet">⬆</div>
+        <h3>Image Ingestion & Safe Validation</h3>
+        <p>Receives user uploads (JPG, PNG, WEBP, BMP). Validates file integrity, enforces size limits (10 MB), and computes SHA-256 cryptographic hashes for instant deduplication.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">MIME Verification</span>
+          <span class="spec-tag">SHA-256 Hash</span>
+        </div>
+      </article>
+
+      <!-- Stage 2 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">02</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap mint">✂</div>
+        <h3>Standardized Preprocessing</h3>
+        <p>Converts arbitrary color profiles/transparencies to RGB. Bicubic resampling scales the input to 224×224 pixels with ImageNet channel normalization ($\mu=[0.5, 0.5, 0.5]$, $\sigma=[0.5, 0.5, 0.5]$).</p>
+        <div class="stage-specs">
+          <span class="spec-tag">224×224 Resizing</span>
+          <span class="spec-tag">RGB Normalization</span>
+        </div>
+      </article>
+
+      <!-- Stage 3 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">03</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap amber">⚛</div>
+        <h3>Vision Transformer Feature Extraction</h3>
+        <p>Passes images through <code>google/vit-base-patch16-224-in21k</code>. 16×16 non-overlapping patches undergo multi-head self-attention. The 768-D [CLS] token is extracted and $L_2$-normalized.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">ViT-B/16 (12 Layers)</span>
+          <span class="spec-tag">768-D $L_2$ Latent Vector</span>
+        </div>
+      </article>
+
+      <!-- Stage 4 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">04</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap blue">🗄</div>
+        <h3>Vector Storage & Local Persistence</h3>
+        <p>Caches embeddings in memory for fast retrieval and persists records to <code>data/metadata.json</code> and <code>data/embeddings.npy</code>, surviving page reloads and server restarts.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">Numpy NPY Cache</span>
+          <span class="spec-tag">JSON Metadata Store</span>
+        </div>
+      </article>
+
+      <!-- Stage 5 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">05</span>
+          <span class="badge-status-impl">IMPLEMENTED (BASELINE)</span>
+        </div>
+        <div class="stage-icon-wrap violet">⌘</div>
+        <h3>k-NN Graph Similarity Refinement</h3>
+        <p>Constructs a sparse k-nearest-neighbor affinity graph ($k=3$). Computes symmetric row-normalized transition matrix $P = D^{-1}\tilde{A}$ and performs 1-step diffusion: $X_{ref} = (1-\alpha)X + \alpha PX$.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">k-NN Message Passing</span>
+          <span class="spec-tag">Laplacian Smoothing ($\alpha=0.35$)</span>
+        </div>
+      </article>
+
+      <!-- Stage 6 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">06</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap mint">🧬</div>
+        <h3>Simulated DNA Fingerprint Generator</h3>
+        <p>Applies uniform 8-bit quantization to normalized coordinates ($[-1, 1] \to [0, 255]$). Transcribes 2-bit binary pairs into canonical nucleotides ($00 \to A, 01 \to C, 10 \to G, 11 \to T$) yielding 3,072 nt.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">Deterministic Quantization</span>
+          <span class="spec-tag">3,072 Nucleotides</span>
+        </div>
+      </article>
+
+      <!-- Stage 7 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">07</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap amber">⌕</div>
+        <h3>Query Embedding & Graph Alignment</h3>
+        <p>Query images undergo real-time ViT inference. The query vector joins the candidate graph as an active node; message passing propagates manifold structure across the candidate set.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">Real-Time Inference</span>
+          <span class="spec-tag">Joint Node Propagation</span>
+        </div>
+      </article>
+
+      <!-- Stage 8 -->
+      <article class="stage-card implemented">
+        <div class="stage-header">
+          <span class="stage-num">08</span>
+          <span class="badge-status-impl">IMPLEMENTED</span>
+        </div>
+        <div class="stage-icon-wrap blue">📊</div>
+        <h3>Ranked Retrieval & Latency Metrics</h3>
+        <p>Calculates refined cosine similarities between query and candidates, sorts top-k nearest neighbors, displays base vs. refined score shifts, and records latency in milliseconds.</p>
+        <div class="stage-specs">
+          <span class="spec-tag">Cosine Ranking</span>
+          <span class="spec-tag">Latency (ms) Benchmark</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 2: Mathematical Formulations -->
+  <section class="panel math-panel">
+    <div class="panel-heading">
+      <div>
+        <div class="section-kicker">FORMAL MATHEMATICAL MODELS</div>
+        <h2>Mathematical Formulations</h2>
+        <p>Rigorous formulation of feature extraction, graph message passing, and in-silico nucleotide quantization.</p>
+      </div>
+      <span class="panel-icon">∑</span>
+    </div>
+
+    <div class="math-grid">
+      <div class="math-card">
+        <h4>1. Vision Transformer Latent Representation</h4>
+        <div class="formula-box">
+          $$z_0 = [x_{class}; x_p^1 E; x_p^2 E; \dots; x_p^N E] + E_{pos}$$
+          $$z_L = \text{TransformerEncoder}(z_0)$$
+          $$e_{img} = \frac{z_L^0}{\|z_L^0\|_2} \in \mathbb{R}^{768}$$
+        </div>
+        <p>The CLS token output from the 12th encoder block is $L_2$-normalized to project onto the unit hypersphere.</p>
+      </div>
+
+      <div class="math-card">
+        <h4>2. k-NN Graph Message Passing Diffusion</h4>
+        <div class="formula-box">
+          $$S_{ij} = \frac{e_i \cdot e_j}{\|e_i\| \|e_j\|}, \quad A_{ij} = \max(S_{ij}, 0) \cdot \mathbb{I}(j \in \mathcal{N}_k(i))$$
+          $$\tilde{A} = \max(A, A^T) + I_N, \quad P = D^{-1} \tilde{A}$$
+          $$E_{refined} = (1 - \alpha) E + \alpha (P E)$$
+        </div>
+        <p>A training-free random-walk diffusion smoothing representations along the empirical visual manifold.</p>
+      </div>
+
+      <div class="math-card">
+        <h4>3. Deterministic DNA Quantization & Mapping</h4>
+        <div class="formula-box">
+          $$q_d = \text{clip}\left(\left\lfloor \frac{e_d + 1.0}{2.0} \times 255 + 0.5 \right\rfloor, 0, 255\right)$$
+          $$b_{d, 1..8} = \text{binary}_8(q_d)$$
+          $$\phi(00) = \text{A}, \; \phi(01) = \text{C}, \; \phi(10) = \text{G}, \; \phi(11) = \text{T}$$
+        </div>
+        <p>Each 8-bit dimension generates 4 nucleotides, yielding a fixed-length simulated sequence of $768 \times 4 = 3,072$ nucleotides.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Planned Future Work (Milestone 2 - 100%) -->
+  <section class="panel future-panel">
+    <div class="panel-heading">
+      <div>
+        <div class="section-kicker">RESEARCH ROADMAP</div>
+        <h2>Planned Future Scope (Milestone 2 — 100%)</h2>
+        <p>Components designed for upcoming milestones to achieve full project completion.</p>
+      </div>
+      <span class="status-pill status-planned">◎ Planned for Milestone 2</span>
+    </div>
+
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="future-badge">PLANNED GNN</div>
+        <h3>Trained Inductive Graph Neural Network</h3>
+        <p>Replace the heuristic k-NN diffusion with a trainable Graph Convolutional Network (GCN) or Graph Attention Network (GAT) trained with supervised contrastive loss to learn non-linear relational manifolds.</p>
+      </div>
+
+      <div class="future-card">
+        <div class="future-badge">PLANNED DNA CODEC</div>
+        <h3>Biological Error-Correcting Codes</h3>
+        <p>Incorporate Reed-Solomon or Luby Transform (DNA Fountain) outer codes, homopolymer run-length limits ($< 3$), and GC-content balancing (45%–55%) for biochemical synthesis compatibility.</p>
+      </div>
+
+      <div class="future-card">
+        <div class="future-badge">PLANNED SIMULATION</div>
+        <h3>Noisy In-Silico Sequencing Simulation</h3>
+        <p>Simulate enzymatic PCR amplification and Nanopore/Illumina sequencing error models (substitutions, insertions, deletions) to evaluate sequence retrieval robustness under degradation.</p>
+      </div>
+
+      <div class="future-card">
+        <div class="future-badge">PLANNED BENCHMARK</div>
+        <h3>Large-Scale Retrieval Evaluation</h3>
+        <p>Benchmark mean Average Precision (mAP@k), Recall@k, and NDCG across ImageNet-100 and MS-COCO image subsets to validate empirical gains over unrefined ViT embeddings.</p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

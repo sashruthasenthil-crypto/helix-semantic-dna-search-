@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Helix — Semantic Image Search{% endblock %}
+{% block breadcrumb %}Semantic Search{% endblock %}
+
+{% block content %}
+<div class="search-layout">
+  <!-- Query Configuration Panel -->
+  <section class="panel search-config-panel">
+    <div class="panel-heading">
+      <div>
+        <div class="section-kicker">02 — QUERY INPUT & GRAPH RETRIEVAL</div>
+        <h2>Find Similar Images</h2>
+        <p>Query the archive using visual context and evaluate k-NN graph-refined semantic proximity.</p>
+      </div>
+      <span class="panel-icon search-icon">⌕</span>
+    </div>
+
+    <!-- Query Upload Form -->
+    <form id="searchForm">
+      <label class="query-preview" id="queryDrop">
+        <input id="queryFile" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" hidden>
+        <span class="query-placeholder" id="queryPlaceholder">
+          <span class="query-plus">＋</span>
+          <strong>Choose a query image</strong>
+          <small>Drop an image here or browse your computer</small>
+        </span>
+        <img id="queryPreview" alt="Query image preview" hidden>
+        <span class="change-image">Change image</span>
+      </label>
+
+      <div class="search-controls">
+        <div class="control-group">
+          <label for="topK">CANDIDATE RESULT COUNT</label>
+          <select id="topK">
+            <option value="3">Top 3 nearest matches</option>
+            <option value="5" selected>Top 5 nearest matches</option>
+            <option value="8">Top 8 nearest matches</option>
+            <option value="10">Top 10 nearest matches</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="graphMethod">REFINEMENT METHOD</label>
+          <div class="method-tag">k-NN Message Passing (Laplacian Diffusion)</div>
+        </div>
+      </div>
+
+      <button class="button button-dark full-button" type="submit" id="searchButton">
+        <span>Run Semantic Search</span>
+        <span class="btn-icon">⌕</span>
+      </button>
+    </form>
+
+    <div class="inline-status" id="searchStatus" role="status"></div>
+
+    <!-- Query DNA Fingerprint Display -->
+    <div class="query-dna-card" id="queryDnaCard" hidden>
+      <div class="dna-card-header">
+        <div>
+          <span class="tag-sub">QUERY IN-SILICO FINGERPRINT</span>
+          <h4>Simulated DNA Sequence</h4>
+        </div>
+        <span class="dna-tag">SIMULATED 3,072 NT</span>
+      </div>
+      <div class="dna-stats-mini" id="queryDnaStatsMini">
+        <!-- Rendered by JS: A, C, G, T counts and GC% -->
+      </div>
+      <code id="queryDnaText" class="dna-code-block"></code>
+      <div class="dna-foot">
+        <span id="queryDnaLengthText">3,072 simulated nucleotides</span>
+        <button class="text-btn" id="queryCopyDnaBtn" type="button">Copy Query DNA</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Retrieval Results Panel -->
+  <section class="panel results-panel" id="resultsSection">
+    <div class="panel-heading results-heading">
+      <div>
+        <div class="section-kicker">03 — RETRIEVAL RESULTS & EVALUATION</div>
+        <h2>Ranked Semantic Matches</h2>
+        <p>Ranked by k-NN graph-refined embedding similarity in ViT latent space.</p>
+      </div>
+      <div class="results-meta-pill" id="resultsMetaWrap">
+        <span class="results-count" id="resultsCount">WAITING FOR QUERY</span>
+        <span class="latency-badge" id="latencyBadge" hidden>⚡ 0 ms</span>
+      </div>
+    </div>
+
+    <!-- Scientific Disclaimer Banner -->
+    <div class="scientific-banner" id="searchDisclaimer" hidden>
+      <span class="banner-icon">⚖</span>
+      <span>
+        <strong>Evaluation Note:</strong> Similarity scores represent visual feature cosine proximity in ViT latent space ($[-1, +1]$ scaled to $0-100\%$) after graph neighbor diffusion, not guaranteed biological identity.
+      </span>
+    </div>
+
+    <!-- Results Grid -->
+    <div class="results-grid" id="resultsGrid">
+      <div class="results-empty" id="resultsEmpty">
+        <div class="empty-illustration">⌕</div>
+        <strong>Your search results will appear here</strong>
+        <span>Select a query image above and run semantic search to retrieve the closest visual matches from the index.</span>
+        {% if indexed_count == 0 %}
+          <div class="empty-cta-box">
+            <p><strong>Notice:</strong> The index is currently empty (0 items). You must index images before searching.</p>
+            <a class="button button-primary" href="/image-index">Index Sample Images Now <span>→</span></a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

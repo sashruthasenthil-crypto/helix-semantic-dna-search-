@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Helix — Image Indexing Archive{% endblock %}
+{% block breadcrumb %}Image Index{% endblock %}
+
+{% block content %}
+<div class="index-layout">
+  <!-- Left Column: Upload & Ingestion Controls -->
+  <section class="panel upload-panel">
+    <div class="panel-heading">
+      <div>
+        <div class="section-kicker">01 — DATA INGESTION & FEATURE EXTRACTION</div>
+        <h2>Build Your Archive</h2>
+        <p>Upload visual items to extract 768-D ViT representations and generate simulated DNA sequences.</p>
+      </div>
+      <span class="panel-icon">＋</span>
+    </div>
+
+    <!-- Upload Form -->
+    <form id="indexForm">
+      <label class="dropzone" id="datasetDrop">
+        <input id="datasetFiles" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" multiple hidden>
+        <span class="upload-symbol">↑</span>
+        <strong>Drop images here, or <u>browse files</u></strong>
+        <span class="drop-hint">Supports JPG, PNG, WEBP, BMP · Up to 10 MB per file</span>
+        <span class="selected-files" id="selectedFiles">No files currently selected</span>
+      </label>
+
+      <!-- Upload Actions -->
+      <div class="form-footer">
+        <div class="privacy-note">
+          <span>◆</span> Extracted locally via ViT-B/16 on <strong id="uploadDeviceText">{{ device|upper }}</strong>
+        </div>
+        <div class="footer-btn-group">
+          <button class="button button-outline" id="loadSampleBtn" type="button" title="Load pre-configured sample images for presentation">
+            <span>⚡</span> Load 8 Samples
+          </button>
+          <button class="button button-primary" type="submit" id="indexButton">
+            Build Image Index <span>→</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Processing Progress Bar & Status -->
+    <div class="progress-wrap" id="indexProgressWrap" hidden>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="indexProgressBar"></div>
+      </div>
+      <div class="progress-label" id="indexProgressText">Processing images...</div>
+    </div>
+
+    <div class="inline-status" id="indexStatus" role="status"></div>
+
+    <!-- Upload Tips Card -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="info-icon">ℹ</span>
+        <strong>Indexing Specifications (Milestone 1)</strong>
+      </div>
+      <ul class="info-list">
+        <li><strong>Resolution:</strong> Resized to 224×224 RGB and normalized with ImageNet statistics.</li>
+        <li><strong>ViT Layer:</strong> 12 Transformer encoder blocks; 768-D [CLS] token normalized with $L_2$ norm.</li>
+        <li><strong>DNA Transcription:</strong> 768 float dimensions $\to$ 8-bit quantization $\to$ 3,072 base-4 nucleotides (A, C, G, T).</li>
+        <li><strong>Deduplication:</strong> Cryptographic SHA-256 hash checks prevent accidental duplicate indexing.</li>
+        <li><strong>Persistence:</strong> Saved to <code>data/metadata.json</code> and <code>data/embeddings.npy</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Right Column: Indexed Archive Repository -->
+  <section class="panel repository-panel">
+    <div class="panel-heading">
+      <div>
+        <div class="section-kicker">REPOSITORY BROWSER</div>
+        <h2>Indexed Archive (<span id="repoCount">{{ indexed_count }}</span>)</h2>
+        <p>Browse stored images, inspect embedding metadata, and examine in-silico nucleotide sequences.</p>
+      </div>
+      <button class="button button-outline danger-hover" id="clearIndexBtn" type="button" title="Clear all indexed images">
+        Clear Index <span>✕</span>
+      </button>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="repo-filter-bar">
+      <input type="text" id="repoSearchInput" placeholder="Filter indexed items by filename..." class="filter-input">
+      <span class="filter-stat" id="filteredCountText">Showing all items</span>
+    </div>
+
+    <!-- Image Items List / Table -->
+    <div class="indexed-list" id="indexedList">
+      <div class="loading-placeholder" id="repoLoading">Loading indexed images...</div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    loadRepositoryImages();
+  });
+</script>
+{% endblock %}
