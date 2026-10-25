@@ -1,5 +1,6 @@
 # Core Web Framework
 Flask>=3.0.0
+gunicorn>=22.0.0
 
 # Deep Learning & Transformers
 torch>=2.0.0
