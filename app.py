@@ -24,7 +24,7 @@ from config import (
     SIMULATED_DNA_LENGTH,
 )
 from vit_service import get_vit_service
-from services.dna_service import (
+from dna_service import (
     encode_embedding_to_dna,
     validate_dna_sequence,
     get_dna_statistics,
@@ -419,4 +419,4 @@ def api_clear_index():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     logger.info("Starting Helix Semantic Archive on http://127.0.0.1:%d", port)
-    app.run(host="127.0.0.1", port=port, debug=False)
+    app.run(host="0.0.0.0", port=port, debug=False)
